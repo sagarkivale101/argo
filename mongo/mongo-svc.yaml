@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: mongo-gessa
+ namespace: gessa
+ labels:
+  name: mongo-gessa
+spec:
+ type: NodePort
+ ports:
+  - port: 27017
+    targetPort: 27017
+ selector:
+  role: mongo-gessa
+
