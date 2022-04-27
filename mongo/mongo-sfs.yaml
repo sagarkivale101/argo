@@ -2,13 +2,13 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
  name: mongo-gessa
- namespace: gessa
+ namespace: mongo-gessa
 spec:
  serviceName: "mongo-gessa"
  selector:
   matchLabels:
    role: mongo-gessa  
- replicas: 2
+ replicas: 3
  template:
   metadata:
    labels:
@@ -22,10 +22,17 @@ spec:
       claimName: mongo-pvc-gessa
    containers:
    - name: mongo
-     image: mongo
+     image: iaurosystems/gessa-mongo:v2.0
+     command:
+      - mongod
+      - "--keyFile"
+      - "mongo.keyfile"
+      - "--bind_ip_all"
+      - "--replSet"
+      - "rs0"
      env:
        - name: MONGO_INITDB_ROOT_USERNAME
-         value: mongoadmin
+         value: root
        - name: MONGO_INITDB_ROOT_PASSWORD
          value: iauro100
      ports:

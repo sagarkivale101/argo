@@ -1,0 +1,32 @@
+version: "3"
+services:
+  mongo1:
+    container_name: mongo1
+    image: iaurosystems/gessa-mongo:v2.0
+    expose:
+      - 27017
+    restart: always
+    command: 'mongod --keyFile mongo.keyfile --bind_ip_all --replSet rs0'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+  mongo2:
+    container_name: mongo2
+    image: iaurosystems/gessa-mongo:v2.0
+    expose:
+      - 27017
+    restart: always
+    command: 'mongod --keyFile mongo.keyfile --bind_ip_all --replSet rs0'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+  mongo3:
+    container_name: mongo3
+    image: iaurosystems/gessa-mongo:v2.0
+    expose:
+      - 27017
+    restart: always
+    command: 'mongod --keyFile mongo.keyfile --bind_ip_all --replSet rs0'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
