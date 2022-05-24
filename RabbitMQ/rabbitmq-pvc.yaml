@@ -1,0 +1,10 @@
+    kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: rabbit-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      #storageClassName: "gp2"
+      resources:
+        requests:
+          storage: 5Gi
