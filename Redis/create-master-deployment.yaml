@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-master
+spec:
+  serviceName: redis-ha-cluster-redis-master-lbl
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-ha-cluster-redis-master-lbl
+  template:
+    metadata:
+      name: redis-ha-cluster-master-p1
+      labels:
+        app: redis-ha-cluster-redis-master-lbl
+        master: "true"
+    spec:
+      # affinity:
+      #   podAntiAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #     - labelSelector:
+      #         matchExpressions:
+      #         - key: slave
+      #           operator: In
+      #           values:
+      #           - "true"
+      #       topologyKey: "kubernetes.io/hostname"
+      volumes:
+        - hostPath:
+            path: /tmp/data/1
+          name: redis-directory-binding
+
+      restartPolicy: Always
+
+      containers:
+      - name: redis-ha-cluster-redis-c1
+        image: samk101/redis-sentinel-ha-cluster:1.0
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: ".2"
+          limits:
+            memory: "500Mi"
+            cpu: ".5"
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+        - containerPort: 6379
+        livenessProbe:
+            exec:
+              command: ["redis-cli"]
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+        readinessProbe:
+            exec:
+              command: ["redis-cli"]
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+
+        volumeMounts:
+          - mountPath: /redis-data
+            name: redis-directory-binding
+            readOnly: false
+
+        env:
+        - name: MASTER
+          value: "true"
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-directory-binding
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      #storageClassName: "local-storage"
+      resources:
+        requests:
+          storage: 5Gi
