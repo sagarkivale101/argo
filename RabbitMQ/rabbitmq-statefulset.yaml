@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+ 
+spec:
+  serviceName: rabbitmq-internal
+ 
+
+  replicas: 1
+  selector: 
+    matchLabels:
+          app: rabbitmq
+  template:
+    metadata:
+      name: rabbitmq
+      labels:
+        app: rabbitmq
+    spec:
+      volumes:
+        - name: rabbit-data
+          persistentVolumeClaim:
+            claimName: rabbit-pvc
+      containers:        
+      - name: rabbitmq
+        image: rabbitmq:3.8-management
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - >
+                  until rabbitmqctl --erlang-cookie ${RABBITMQ_ERLANG_COOKIE} await_startup; do sleep 1; done;
+                  rabbitmqctl --erlang-cookie ${RABBITMQ_ERLANG_COOKIE} set_policy ha-two "" '{"ha-mode":"exactly", "ha-params": 2, "ha-sync-mode": "automatic"}'
+
+        ports:
+        - containerPort: 4369
+        - containerPort: 5672
+        - containerPort: 25672
+        - containerPort: 15672
+        resources:
+          requests:
+            memory: "300Mi"
+            cpu: "200m"
+          limits:
+            memory: "700Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -ec
+            - rabbitmq-diagnostics -q ping
+          failureThreshold: 6
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 20  
+
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -ec
+            - rabbitmq-diagnostics -q ping
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 20
+
+        
+        # livenessProbe:
+        #   exec:
+          
+        #     command: ["rabbitmq-diagnostics", "status", "--erlang-cookie", "$(RABBITMQ_ERLANG_COOKIE)"]
+        #   initialDelaySeconds: 60
+        #   # See https://www.rabbitmq.com/monitoring.html for monitoring frequency recommendations.
+        #   periodSeconds: 60
+        #   timeoutSeconds: 15
+        # readinessProbe:
+        #   exec:
+           
+        #     command: ["rabbitmq-diagnostics", "status", "--erlang-cookie", "$(RABBITMQ_ERLANG_COOKIE)"]
+        #     # To use a stage 4 check:
+        #     # command: ["rabbitmq-diagnostics", "check_port_connectivity", "--erlang-cookie", "$(RABBITMQ_ERLANG_COOKIE)"]
+        #   initialDelaySeconds: 20
+        #   periodSeconds: 60
+        #   timeoutSeconds: 10
+        # # envFrom:
+        # #  - configMapRef:
+        # #      name: rabbitmq-cfg
+        env:
+          - name: HOSTNAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: RABBITMQ_USE_LONGNAME
+            value: "true"
+          - name: RABBITMQ_NODENAME
+            value: "rabbit@$(HOSTNAME).rabbitmq-internal.$(NAMESPACE).svc.cluster.local"
+          - name: K8S_SERVICE_NAME
+            value: "rabbitmq-internal"
+          - name: RABBITMQ_DEFAULT_USER
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-secret
+                key: RABBITMQ_DEFAULT_USER
+          - name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-secret
+                key: RABBITMQ_DEFAULT_PASS
+          - name: RABBITMQ_ERLANG_COOKIE
+            value: secret_cookie
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+      
+        volumeMounts:
+            - mountPath: "/var/lib/rabbitmq/mnesia/"
+              name: rabbit-data
+
+
+        
