@@ -333,7 +333,7 @@ alertmanager:
 
     ## Service type
     ##
-    type: LoadBalancer
+    type: ClusterIP
 
   ## Configuration for creating a separate Service for each statefulset Alertmanager replica
   ##
@@ -1948,7 +1948,7 @@ prometheus:
 
     ## Service type
     ##
-    type: LoadBalancer
+    type: ClusterIP
 
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
