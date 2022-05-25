@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: kibana
+  template:
+    metadata:
+      labels:
+        run: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:6.5.4
+       
+        env:
+        - name: ELASTICSEARCH_URL
+          value: http://elasticsearch:9200
+        - name: XPACK_SECURITY_ENABLED
+          value: "true"
+        ports:
+        - containerPort: 5601
+          name: http
+          protocol: TCP
+          
+        resources: 
+          requests:
+           
+            memory: "200Mi"
+            cpu: "100m"
+          limits:
+           
+            memory: "600Mi"
+            cpu: "200m"
+        
+        # livenessProbe:
+        #   httpGet:
+        #     path: http://kibana.gessa.io/api/status
+        #     port: http
+        #   initialDelaySeconds: 60
+        #   timeoutSeconds: 60
+        # readinessProbe:
+        #   httpGet:
+        #     path: http://kibana.gessa.io/api/status
+        #     #path: /api/status
+        #     port: http
+        #   initialDelaySeconds: 60
+        #   timeoutSeconds: 60
+
+
+   
+
+
+# https://github.com/chamilad/kibana-prometheus-exporter#todo
+
+# manifest file : https://github.com/chamilad/kibana-prometheus-exporter/tree/master/k8s
+
+# ---
