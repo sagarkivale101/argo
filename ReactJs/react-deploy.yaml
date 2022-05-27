@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myreact
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myreact
+  template:
+    metadata:
+      labels:
+        app: myreact
+    spec:
+      containers:
+      - name: myreact
+        image: samk101/myreact
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "500m"
+          requests:
+            memory: "200Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+                      exec:
+                        command: ["ls"]
+                      initialDelaySeconds: 30
+                      timeoutSeconds: 5
+        readinessProbe:
+                      exec:
+                        command: ["ls"]
+                      initialDelaySeconds: 30
+                      timeoutSeconds: 5
+        volumeMounts:
+        - name: reactm
+          mountPath: "/tmp/data"
+      volumes:
+      - name: reactm
+        persistentVolumeClaim:
+          claimName: reactpvc
+
+
+
