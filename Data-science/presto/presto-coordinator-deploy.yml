@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  name: presto-coordinator
+  namespace: telco-datastorage-mvp
+spec:
+  selector:
+    matchLabels:
+      app: presto-coordinator
+  template:
+    metadata:
+      labels:
+        app: presto-coordinator
+    spec:
+      containers:
+      - env:
+        - name: PRESTO_CONF_COORDINATOR
+          value: "true"
+        - name: PRESTO_CONF_DISCOVERY_URI
+          value: http://presto-coordinator:8080
+        image: image-registry.openshift-image-registry.svc:5000/telco-datastorage-mvp/presto
+        name: presto-coordinator
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8889
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "4"
+            memory: 16Gi
+          requests:
+            cpu: "4"
+            memory: 16Gi
+        volumeMounts:
+        - name: presto-coordinator
+          mountPath: /presto-coordinator-storage
+      volumes:
+      - name: presto-coordinator
+        persistentVolumeClaim:
+          claimName: presto-coordinator

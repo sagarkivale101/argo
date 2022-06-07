@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: presto-worker
+  namespace: telco-datastorage-mvp
+spec:
+  selector:
+    matchLabels:
+      app: presto-worker
+  template:
+    metadata:
+      labels:
+        app: presto-worker
+    spec:
+      containers:
+      - env:
+        - name: PRESTO_CONF_COORDINATOR
+          value: "false"
+        - name: PRESTO_CONF_DISCOVERY_URI
+          value: http://presto-coordinator:8080
+        image: image-registry.openshift-image-registry.svc:5000/telco-datastorage-mvp/presto
+        name: presto-worker
+        ports:
+        - containerPort: 8889
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 4
+            memory: 16Gi
+          requests:
+            cpu: 4
+            memory: 16Gi
+        volumeMounts:
+        - name: presto-worker
+          mountPath: /presto-worker-storage
+      volumes:
+      - name: presto-worker
+        persistentVolumeClaim:
+          claimName: presto-worker
