@@ -1,0 +1,44 @@
+metastore:
+  databaseHost: postgresql.hivemr3.svc.cluster.local
+  databaseName: hive5mr3
+  warehouseDir: s3a://hivemr3-6054f65b-976f-4d25-8a0e-ea0a33898569/warehouse
+  #warehouseDir: file:///tmp/warehouse
+  dbType: postgres
+  resources:
+    requests:
+      cpu: 2
+      memory: 16Gi
+    limits:
+      cpu: 2
+      memory: 16Gi
+  heapSize: 16384
+  initSchema: true
+
+hostAliases:
+- ip: "172.19.217.54"
+  hostnames:
+  - "postgresmvp"
+
+workDir:
+  create: false
+
+hive:
+  port: 9852
+  httpport: 10001
+  externalIp: 172.19.217.54
+  resources:
+    requests:
+      cpu: 2
+      memory: 16Gi
+    limits:
+      cpu: 2
+      memory: 16Gi
+  heapSize: 16384
+
+docker:
+  #image: mr3project/hive3:1.4
+  image: image-registry.openshift-image-registry.svc:5000/openshift/hive3:1.4
+  #containerWorkerImage: mr3project/hive3:1.4
+  containerWorkerImage: image-registry.openshift-image-registry.svc:5000/openshift/hive3:1.4
+  imagePullPolicy: Always
+

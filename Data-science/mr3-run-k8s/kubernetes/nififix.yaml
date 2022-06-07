@@ -1,0 +1,48 @@
+Name:                   nifi
+Namespace:              test
+CreationTimestamp:      Wed, 30 Mar 2022 07:09:04 +0530
+Labels:                 app=nifi
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               app=nifi
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nifi
+  Init Containers:
+   nifi-fix:
+    Image:      quay.io/iam_roger_io/nifi-ocp:0.0.2
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      bash
+      -c
+      if [ ! -d /opt/nifi-fix/conf ]; then cp -ra /opt/nifi/nifi-current/* /opt/nifi-fix/; fi
+    Environment:  <none>
+    Mounts:
+      /opt/nifi-fix from test-claim8 (rw)
+  Containers:
+   nifi:
+    Image:      quay.io/iam_roger_io/nifi-ocp:0.0.2
+    Port:       8443/TCP
+    Host Port:  0/TCP
+    Environment:
+      NIFI_WEB_PROXY_HOST:               nifi-test.apps.mvp.telcostackmvp.br.telefonica.com
+      SINGLE_USER_CREDENTIALS_USERNAME:  admin
+      SINGLE_USER_CREDENTIALS_PASSWORD:  admin1234567
+    Mounts:
+      /opt/nifi/nifi-current from test-claim8 (rw)
+  Volumes:
+   test-claim8:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  test-claim8
+    ReadOnly:   false
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nifi-586bdcfd8b (1/1 replicas created)
+Events:          <none>
