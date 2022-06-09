@@ -40,14 +40,14 @@ spec:
           httpGet:
             path: api/status
             port: http
-          initialDelaySeconds: 60
+          initialDelaySeconds: 120
           timeoutSeconds: 60
         readinessProbe:
           httpGet:
             path: api/status
             #path: /api/status
             port: http
-          initialDelaySeconds: 60
+          initialDelaySeconds: 120
           timeoutSeconds: 60
 
 
