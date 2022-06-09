@@ -29,26 +29,36 @@ spec:
         resources: 
           requests:
            
-            memory: "200Mi"
-            cpu: "100m"
+            memory: "500Mi"
+            cpu: "200m"
           limits:
            
-            memory: "600Mi"
-            cpu: "200m"
+            memory: "1000Mi"
+            cpu: "500m"
         
-        # livenessProbe:
-        #   httpGet:
-        #     path: http://kibana.gessa.io/api/status
-        #     port: http
-        #   initialDelaySeconds: 60
-        #   timeoutSeconds: 60
-        # readinessProbe:
-        #   httpGet:
-        #     path: http://kibana.gessa.io/api/status
-        #     #path: /api/status
-        #     port: http
-        #   initialDelaySeconds: 60
-        #   timeoutSeconds: 60
+        livenessProbe:
+          httpGet:
+            path: api/status
+            port: http
+          initialDelaySeconds: 60
+          timeoutSeconds: 60
+        readinessProbe:
+          httpGet:
+            path: api/status
+            #path: /api/status
+            port: http
+          initialDelaySeconds: 60
+          timeoutSeconds: 60
+
+
+   
+
+
+# https://github.com/chamilad/kibana-prometheus-exporter#todo
+
+# manifest file : https://github.com/chamilad/kibana-prometheus-exporter/tree/master/k8s
+
+# ---
 
 
    
