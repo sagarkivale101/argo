@@ -1,19 +1,20 @@
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: rabbitmq
-# spec:
-#   type: LoadBalancer
-#   #clusterIP: None
-#   ports:
-#   - port: 15672
-#     targetPort: 15672
-#     name: discovery
-#   #- port: 5672
-#   # targetPort: 5672
-#   # name: amqp
-#   selector:
-#     app: rabbitmq
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-internal
+  labels:
+    app: rabbitmq
+spec:
+  selector:
+    app: rabbitmq
+  type: ClusterIP
+  ports:
+  - port: 15672
+    protocol: TCP
+    targetPort: 15672
+
 
 # kind: Service
 # apiVersion: v1
@@ -53,24 +54,48 @@
 #      protocol: TCP
 #      port: 15672
 #      targetPort: 15672
----
+# ---
 
-apiVersion: v1
-kind: Service
-metadata:
-  name: rabbitmq-internal
-  labels:
-    app: rabbitmq
-spec:
-  selector:
-    app: rabbitmq
-  type: ClusterIP
-  ports:
-  - port: 15672
-    protocol: TCP
-    targetPort: 15672
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: rabbitmq
+# spec:
+#   type: LoadBalancer
+#   #clusterIP: None
+#   ports:
+#   - port: 15672
+#     targetPort: 15672
+#     name: discovery
+#   #- port: 5672
+#   # targetPort: 5672
+#   # name: amqp
+#   selector:
+#     app: rabbitmq
 
   #  - name: rabbitmq-amqp-port
   #    protocol: TCP
   #    port: 5672
   #    targetPort: 5672
+
+---
+
+
+# kind: Service
+# apiVersion: v1
+# metadata:
+  
+#   name: rabbitmq
+#   labels:
+#     app: rabbitmq
+#     # type: ClusterIP
+# spec:
+#   type: ClusterIP
+#   # type: LoadBalancer
+#   selector:
+#     app: rabbitmq
+#   ports:
+#    - name: rabbitmq-mgmt-port
+#      protocol: TCP
+#      port: 15672
+#      targetPort: 15672

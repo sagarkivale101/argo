@@ -1,13 +1,10 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: rabbitmq
- 
+  name: rabbitmq 
 spec:
   serviceName: rabbitmq-internal
- 
-
-  replicas: 1
+  replicas: 3
   selector: 
     matchLabels:
           app: rabbitmq
@@ -17,10 +14,6 @@ spec:
       labels:
         app: rabbitmq
     spec:
-      volumes:
-        - name: rabbit-data
-          persistentVolumeClaim:
-            claimName: rabbit-pvc
       containers:        
       - name: rabbitmq
         image: rabbitmq:3.8-management
@@ -35,9 +28,9 @@ spec:
                   rabbitmqctl --erlang-cookie ${RABBITMQ_ERLANG_COOKIE} set_policy ha-two "" '{"ha-mode":"exactly", "ha-params": 2, "ha-sync-mode": "automatic"}'
 
         ports:
-        #- containerPort: 4369
-        #- containerPort: 5672
-        #- containerPort: 25672
+        # - containerPort: 4369
+        # - containerPort: 5672
+        # - containerPort: 25672
         - containerPort: 15672
         resources:
           requests:
@@ -122,10 +115,17 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
-      
         volumeMounts:
             - mountPath: "/var/lib/rabbitmq/mnesia/"
               name: rabbit-data
+  volumeClaimTemplates:
+  - metadata:
+      name: rabbit-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 2Gi          
 
 
         
