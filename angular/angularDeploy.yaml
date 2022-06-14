@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular
+  labels:
+    app: angular
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular
+  template:
+    metadata:
+      labels:
+        app: angular
+    spec:
+      containers:
+      - name: angukar
+        image: samk101/angular
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 200m
+            memory: 200Mi
+        readinessProbe:
+          exec:
+            command:
+            - ls
+          initialDelaySeconds: 20
+          
+        livenessProbe:
+          exec:
+            command:
+            - ls
+          initialDelaySeconds: 20
+        volumeMounts:
+        - mountPath: /mnt
+          name: angukar-data
+      volumes:
+      - name: angukar-data
+        persistentVolumeClaim:
+          claimName: angukar-vol
+          
+
+
