@@ -1,1 +1,3 @@
-oc apply -f influxDB.yaml -n telco-datastorage-mvp 
+kubectl create -f influxDB-sfs.yaml
+
+kubectl create -f influxDB-svc.yaml

@@ -5,7 +5,7 @@ metadata:
     labels:
         app: influxdb
     name: influxdb
-    namespace: telco-datastorage-mvp
+    # namespace: telco-datastorage-mvp
 spec:
     replicas: 1
     selector:
@@ -23,30 +23,41 @@ spec:
                 ports:
                   - containerPort: 8086
                     name: influxdb
+                resources:
+                  requests:
+                    memory: "500Mi"
+                    cpu: "200m"
+                  limits:
+                    memory: "1000Mi"
+                    cpu: "500m" 
+                readinessProbe:
+                    exec:
+                      command:
+                        - /bin/bash
+                    initialDelaySeconds: 10
+                    periodSeconds: 25
+                livenessProbe:
+                    exec:
+                      command:
+                        - /bin/bash
+                    initialDelaySeconds: 10
+                    periodSeconds: 25     
                 volumeMounts:
                   - mountPath: /var/lib/influxdb2
                     name: data
     volumeClaimTemplates:
       - metadata:
             name: data
-            namespace: telco-datastorage-mvp
         spec:
             accessModes:
               - ReadWriteOnce
             resources:
                 requests:
-                    storage: 10G
----
-apiVersion: v1
-kind: Service
-metadata:
-    name: influxdb
-    namespace: telco-datastorage-mvp
-spec:
-    ports:
-      - name: influxdb
-        port: 8086
-        targetPort: 8086
-    selector:
-        app: influxdb
-    type: ClusterIP
+                    storage: 5Gi
+    
+
+
+
+
+
+
