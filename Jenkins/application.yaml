@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://neil596@bitbucket.org/inilesh/gessa-tools-setup.git
+    #repoURL: https://github.com/sagarkivale101/argoCD_test1.git
+    targetRevision: HEAD
+    path: Jenkins
+  destination: 
+    server: https://601142D48106B9B8E74C9A7FD4B50655.gr7.us-east-2.eks.amazonaws.com
+    namespace: key
+    
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true
