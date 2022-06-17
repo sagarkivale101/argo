@@ -8,7 +8,6 @@ spec:
 
   source:
     repoURL: ${repoURL}
-    #repoURL: https://github.com/sagarkivale101/argoCD_test1.git
     targetRevision: HEAD
     path: Jenkins
   destination: 
