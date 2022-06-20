@@ -7,7 +7,7 @@ spec:
 
   source:
     repoURL: ${repoURL}
-    targetRevision: HEAD
+    targetRevision: master
   destination: 
     server: ${server}
     namespace: ${namespace}
