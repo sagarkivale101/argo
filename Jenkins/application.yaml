@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
 
-  source: https://neil596@bitbucket.org/inilesh/gessa-tools-setup.git
-    repoURL: 
+  source: 
+    repoURL: https://neil596@bitbucket.org/inilesh/gessa-tools-setup.git
     targetRevision: master
     path: Jenkins
   destination: 
