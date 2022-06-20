@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: jenkins
-  
+  namespace: argocd
 spec:
   project: default
 
@@ -12,7 +12,7 @@ spec:
     path: Jenkins
   destination: 
     server: ${server}
-    namespace: ${namespace}
+    namespace: key
     
 
     
