@@ -249,6 +249,9 @@ spec:
                   effect: "NoExecute"
                   tolerationSeconds: 5
 
+
+
+
 ---
 # Source: kube-arangodb/templates/apps-operator/cluster-role-binding.yaml
 

@@ -33,9 +33,10 @@ spec:
             - arangostorage
         singular: arangolocalstorage
     scope: Cluster
-    version: v1alpha
+    #version: v1alpha
     versions:
     - name: v1alpha1
+      served: true
       storage: true
       schema:
         openAPIV3Schema:

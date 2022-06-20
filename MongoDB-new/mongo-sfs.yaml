@@ -19,17 +19,17 @@ spec:
      image: mongo
      ports:
       - containerPort: 27017
-    #  env:
-    #   - name: MONGO_INITDB_ROOT_USERNAME
-    #     valueFrom:
-    #         secretKeyRef:
-    #           name: mongo-secret
-    #           key: MONGO_INITDB_ROOT_USERNAME
-    #   - name: MONGO_INITDB_ROOT_PASSWORD
-    #     valueFrom:
-    #         secretKeyRef:
-    #           name: mongo-secret
-    #           key: MONGO_INITDB_ROOT_PASSWORD
+     env:
+      - name: MONGO_INITDB_ROOT_USERNAME
+        valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_USERNAME
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_PASSWORD
      resources:
           limits:
             cpu: 1100m
