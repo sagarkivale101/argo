@@ -9,6 +9,7 @@ spec:
   source:
     repoURL: ${repoURL}
     targetRevision: master
+    path: Jenkins
   destination: 
     server: ${server}
     namespace: ${namespace}
