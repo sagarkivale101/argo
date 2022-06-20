@@ -6,12 +6,12 @@ metadata:
 spec:
   project: default
 
-  source:
-    repoURL: ${repoURL}
+  source: https://neil596@bitbucket.org/inilesh/gessa-tools-setup.git
+    repoURL: 
     targetRevision: master
     path: Jenkins
   destination: 
-    server: ${server}
+    server: https://kubernetes.default.svc
     namespace: key
     
 
