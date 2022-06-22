@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+
+  source: 
+    repoURL: https://neil596@bitbucket.org/inilesh/gessa-tools-setup.git
+    targetRevision: stage4
+    path: Jenkins
+  destination: 
+    server:  https://kubernetes.default.svc
+    namespace: key
+    
+
+    
