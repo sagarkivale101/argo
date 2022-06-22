@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+spec:
+  project: default
+
+  source: 
+    repoURL: https://github.com/Swapnil231996/argo.git
+    targetRevision: stage21
+    path: Grafana
+  destination: 
+    server:  https://kubernetes.default.svc
+    namespace: key
+    
+
+    
