@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     app: prometheus
-  type: NodePort
+  type: LoadBalancer
   ports:
   - name: prometheus
     protocol: TCP
