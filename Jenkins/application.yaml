@@ -7,11 +7,11 @@ spec:
   project: default
 
   source: 
-    repoURL: ${repoURL}
-    targetRevision: ${branch}
+    repoURL: https://neil596@bitbucket.org/inilesh/gessa-tools-setup.git
+    targetRevision: latest
     path: Jenkins
   destination: 
-    server: ${server}
+    server:  https://kubernetes.default.svc
     namespace: ${namespace}    
     
 
