@@ -22,7 +22,7 @@ spec:
       spec:
         containers:
         - name: prometheus
-          image: prom/prometheus:latest
+          image: bitnami/prometheus:latest
 
           livenessProbe:
             failureThreshold: 3
