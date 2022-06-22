@@ -1,0 +1,67 @@
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: prometheus-deployment
+   
+  
+    labels: 
+      app: prometheus
+      tier: deploy
+spec:
+    replicas: 1
+    selector:
+      matchLabels: 
+        app: prometheus
+    template:
+      metadata:
+        labels:
+          app: prometheus
+      spec:
+        containers:
+        - name: prometheus
+          image: prom/prometheus:latest
+
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /-/healthy
+              port: 9090
+              scheme: HTTP
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /-/ready
+              port: 9090
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+
+          resources:
+           requests:
+             cpu: "710m"
+             memory: 1000Mi
+           limits:
+             cpu: "750m"
+             memory: 2000Mi
+
+          ports:
+          - containerPort: 9090
+
+          volumeMounts:
+          - name: prometheus-volume
+            mountPath: "/prometheus"
+
+        volumes:
+        - name: prometheus-volume
+          persistentVolumeClaim:
+             claimName: prom-pvc
+
