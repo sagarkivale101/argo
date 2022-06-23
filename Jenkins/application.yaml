@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+
+  source: 
+    repoURL: https://github.com/Swapnil231996/argo.git
+    targetRevision: satge899
+    path: Jenkins
+  destination: 
+    server: https://A4A4A4DE8A96779AA597A5234AD792EB.gr7.us-east-2.eks.amazonaws.com
+    namespace: key
+    
+
+    
